@@ -1,0 +1,48 @@
+;Raunak Mantri - 2017B5A71340H - f20171340@hyderabad.bits-pilani.ac.in
+;Rudrajit Kargupta - 2017B3A70452H - f20170452@hyderabad.bits-pilani.ac.in
+;Aditya Agarwal - 2017B1A71075H - f20171075@hyderabad.bits-pilani.ac.in
+;Amogh Saxena - 2017B4A71731H - f20171731@hyderabad.bits-pilani.ac.in
+;Jalaj Bansal - 2017B3A71610H - f20171610@hyderabad.bits-pilani.ac.in
+
+
+start: 
+    IPA                                  ;Take INPUT
+    JMPZ exit                            ;if INPUT = 0, exit
+    JMPN start                           ;if INPUT is -ve, ignore the input (don't store)
+    M2M stackAddress                     ;if INPUT is +ve, continue and save the value from accumulator to memory value pointed by stackAddress
+    LDA stackAddress                     ;Load address value stored at stackAddress i.e 150 initially to accumulator
+    ADD one                              ;Add one to the value so as to store the next value at next cell 
+    STA stackAddress                     ;Store the new updated accumulator value(address) at stackAddress
+    JMP takeInput                        ;JUMP to take another input 
+
+takeInput: 
+    IPA                                  ;Take INPUT
+    JMPZ loadStackAddress                ;if INPUT = 0, stop input
+    JMPN takeInput                       ;if INPUT is -ve, ignore the input (don't store)
+    M2M stackAddress                     ;if INPUT is +ve, continue and save the value from accumulator to memory value pointed by stackAddress
+    LDA stackAddress                     ;Load address value stored at stackAddress i.e 150 initially to accumulator
+    ADD one                              ;Add one to the value so as to store the next value at next cell 
+    STA stackAddress                     ;Store the new updated accumulator value(address) at stackAddress
+    JMP takeInput                        ;JUMP to take another input
+
+loadStackAddress: 
+    LDA stackAddress                     ;This step is to load the latest updated adress of the top of stack 
+    SUB one                              ;Since after the last step also one was added to this adress, we subtract one
+    STA stackAddress                     ;And store that address value from accumulator to the address 
+
+displayStack: 
+    M2A stackAddress                     ;Move the value stored at address given by stackAddress's value(TOP of stack) to Accumulator
+    OPA                                  ;Print Accumulator Value
+    LDA stackAddress                     ;Load the address value stored at the given address 
+    SUB one                              ; Subract one to get the previos top of stack
+    STA stackAddress                     ; STore the updated adress value from accumulator to the address
+    LDA stackAddress                     ;Load the address value stored at the given address 
+    SUB address                          ;Subtract with the inital reference address value
+    JMPN exit                            ;If that is zero, exit the program
+    JMP displayStack                     ;Else continue with the display of stack
+
+exit: STOP                               ;To exit program
+
+address: .data 1 150                     ; Just for reference of the inital start address of Stack
+one: .data 1 1                           ; Just store one to be used in instructions
+stackAddress: .data 1 150                ; Address of Top of Stack
