@@ -1,0 +1,42 @@
+;Raunak Mantri - 2017B5A71340H - f20171340@hyderabad.bits-pilani.ac.in
+;Rudrajit Kargupta - 2017B3A70452H - f20170452@hyderabad.bits-pilani.ac.in
+;Aditya Agarwal - 2017B1A71075H - f20171075@hyderabad.bits-pilani.ac.in
+;Amogh Saxena - 2017B4A71731H - f20171731@hyderabad.bits-pilani.ac.in
+;Jalaj Bansal - 2017B3A71610H - f20171610@hyderabad.bits-pilani.ac.in
+
+Start:  ipa		           ;Take INPUT
+	jmpn  Start  	           ;if INPUT is -ve, ignore the input (don't store)
+	jmpz Done               
+        m2m loc                    ;if INPUT is +ve, continue and save the value from accumulator to memory value pointed by loc
+        lda loc                    ;Load address value stored at loc
+        add one                    ;Add one to the value so as to store the next value at next cell
+        sta loc                    ;Store the new updated accumulator value
+        lda cnt                    ;Load count value
+        add one                    ;Add one to the value so as to store the next
+        sta cnt                    ;Store the new updated accumulator value
+        jmp Start                  
+
+Done:   lda loc                    ;Load address value stored at loc
+        sub cnt
+        sta loc                    ;Store the new updated accumulator value
+
+Print:  m2a loc                    ;Move the value stored at address given by loc's value to Accumulator
+        add sum
+        sta sum                    ;Store the new updated accumulator value(address) at sum
+        opa                        ;Print Accumulator Value
+        lda loc                    ;Load address value stored at loc
+        add one                    ;Add one to the value so as to store the next value at next cell
+        sta loc                    ;Store the new updated accumulator value
+        lda cnt                    ;Load count value
+        sub one                    ;Subract one to get the previos top of stack
+        sta cnt                    ;Store the new updated accumulator value
+        jmpp Print
+        stop                       ;To exit program
+
+loc:    .data 1 100
+
+one:    .data 1 1
+
+cnt:    .data 1 0
+
+sum:    .data 1 0
